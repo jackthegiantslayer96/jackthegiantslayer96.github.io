@@ -1,0 +1,7 @@
+# ESP32-C3-MINI-1 (4MB flash) single-app layout. No OTA: the deep-sleep cycle
+# has no runtime update path, and the space is worth more as app room.
+#
+# Name,      Type, SubType, Offset,   Size,    Flags
+nvs,         data, nvs,     0x9000,   0x5000,
+phy_init,    data, phy,     0xe000,   0x1000,
+factory,     app,  factory, 0x10000,  0x3E0000,

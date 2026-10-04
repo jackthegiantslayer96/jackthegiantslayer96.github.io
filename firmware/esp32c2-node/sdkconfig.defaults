@@ -1,0 +1,42 @@
+# Target: ESP32-C3-MINI-1 (RISC-V)
+#
+# Originally written for the ESP32-C2. The hardware in hand turned out to be a
+# C3, identified by its native USB Serial/JTAG peripheral enumerating as
+# VID_303A&PID_1001 - a peripheral the C2 does not have. Both are RISC-V and
+# share the ADC / GPIO / deep-sleep layout this firmware relies on, so the
+# target name is effectively the only change required.
+CONFIG_IDF_TARGET="esp32c3"
+
+# Flash size. C3-MINI-1 SuperMini boards are normally 4MB; drop this to
+# CONFIG_ESPTOOLPY_FLASHSIZE_2MB=y if your module is marked FH2/FD2.
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="4MB"
+
+# Custom partition table (matches partitions.csv)
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# Wi-Fi + HTTP client + cJSON all live on the main task; the 3584-byte default
+# stack overflows once esp_http_client and cJSON are on it.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=6144
+
+# Console on BOTH the UART0 pins and the native USB Serial/JTAG port.
+#
+# GPIO43 (TX) / GPIO44 (RX) are the UART0 pins. On a C3-MINI-1 they are not
+# routed to the USB connector, so a UART0-only console is invisible over USB -
+# which is what made the board look dead during bring-up. These pins are also
+# what an external CP2102/CH340 USB-UART adapter connects to, so UART0 is the
+# reliable bring-up path.
+#
+# Native USB console is kept enabled as well: it is convenient while it works,
+# and harmless when it does not.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+
+# Deep sleep powers the radio down regardless of this option; it is kept off so
+# the flash power-down path stays on Espressif's default behaviour. Relevant
+# only if the light-sleep variant is built later.
+# CONFIG_ESP_SLEEP_POWER_DOWN_FLASH=y
+
+# Allow the deep-sleep stub to log, which is invaluable while bring-up debugging.
+CONFIG_ESP_SLEEP_DEBUG=y

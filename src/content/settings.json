@@ -1,0 +1,8 @@
+{
+  "siteName": "grammarhero",
+  "tagline": "Your one line about what you do.",
+  "intro": "A second sentence that says what you care about and what a visitor should expect to find here.",
+  "accent": "blue",
+  "font": "inter",
+  "featuredProjects": ["acme-dashboard", "northwind-api", "atlas-design"]
+}

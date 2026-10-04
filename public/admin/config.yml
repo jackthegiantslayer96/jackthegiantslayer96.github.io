@@ -1,0 +1,126 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# Editor for grammarhero. Changes are committed to this repo, which triggers a
+# rebuild on GitHub Actions and updates the live site in about a minute.
+
+backend:
+  name: github
+  repo: YOUR_USERNAME/YOUR_USERNAME.github.io
+  branch: master
+  # base_url: https://sveltia-cms-auth.YOUR_SUBDOMAIN.workers.dev
+
+media_folder: /public/uploads
+public_folder: /uploads
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: /src/content/projects
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} — {{year}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Year, name: year, widget: string }
+      - { label: Summary, name: summary, widget: string, hint: "One line shown in the project list." }
+      - { label: Stack, name: stack, widget: list, field: { label: Technology, name: item, widget: string }, required: false }
+      - { label: Link, name: href, widget: string, required: false, hint: "Live site or source URL." }
+      - { label: Cover image, name: image, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: apps
+    label: Apps
+    label_singular: App
+    folder: /src/content/apps
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string }
+      - { label: URL, name: url, widget: string, hint: "Where the app is hosted." }
+      - { label: Icon, name: icon, widget: image, required: false }
+      - { label: Show icon, name: embed, widget: boolean, default: false, required: false, hint: "Leave off for now — the card always links out." }
+
+  - name: blog
+    label: Blog posts
+    label_singular: Post
+    folder: /src/content/blog
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} — {{date}}"
+    sortable_fields: [date]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: Description, name: description, widget: string, hint: "One line shown in the post list." }
+      - { label: Cover image, name: cover, widget: image, required: false }
+      - label: Body
+        name: body
+        widget: markdown
+        required: false
+        modes: [rich_text, raw]
+        buttons: [bold, italic, link, heading-two, bulleted-list, numbered-list, quote, code]
+        hint: "Paste a YouTube or Vimeo link on its own line to embed a player."
+
+  - name: settings
+    label: Site settings
+    files:
+      - name: settings
+        label: Settings
+        file: /src/content/settings.json
+        format: json
+        fields:
+          - { label: Site name, name: siteName, widget: string }
+          - { label: Tagline, name: tagline, widget: string, hint: "The big line on the home page." }
+          - { label: Intro, name: intro, widget: string, hint: "The paragraph under the tagline." }
+          - label: Accent colour
+            name: accent
+            widget: select
+            default: blue
+            options:
+              - { label: Blue, value: blue }
+              - { label: Teal, value: teal }
+              - { label: Violet, value: violet }
+              - { label: Amber, value: amber }
+              - { label: Rose, value: rose }
+              - { label: Lime, value: lime }
+          - label: Font
+            name: font
+            widget: select
+            default: inter
+            options:
+              - { label: Sans, value: inter }
+              - { label: Serif, value: serif }
+              - { label: Mono, value: mono }
+              - { label: Rounded, value: rounded }
+          - { label: Featured projects, name: featuredProjects, widget: list, required: false, field: { label: Slug, name: item, widget: string }, hint: "Leave empty to show the three most recent." }
+
+  - name: about
+    label: About page
+    files:
+      - name: about
+        label: About
+        file: /src/content/about.md
+        format: frontmatter
+        fields:
+          - { label: Name, name: name, widget: string }
+          - { label: Role, name: role, widget: string, required: false }
+          - { label: Photo, name: photo, widget: image, required: false }
+          - label: Links
+            name: links
+            widget: list
+            required: false
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: URL, name: url, widget: string }
+          - { label: Bio, name: body, widget: markdown, required: false }
